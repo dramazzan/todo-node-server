@@ -58,7 +58,7 @@ exports.loginUser = [
                 return res.status(401).json({success: false, message: "Wrong username or password"});
             }
 
-            const token = jwt.sign({id: user._id}, config.secret, {expiresIn: "1d"});
+            const token = jwt.sign({id: user._id}, config.secretKey, {expiresIn: "1d"});
 
             return res.json({
                 success: true,
@@ -75,6 +75,10 @@ exports.loginUser = [
         }
     }
 ];
+
+
+
+
 
 exports.getUsers = async (req, res) => {
     try {

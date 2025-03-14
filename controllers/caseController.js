@@ -35,7 +35,7 @@ exports.updateCase = async (req, res) => {
 
 exports.deleteCase = async (req,res)=>{
     try{
-        const deletedCase = await Case.findByIdAndDelete(req.params.id , req.params.caseId);
+        const deletedCase = await Case.findByIdAndDelete(req.params.id);
         if(!deletedCase){
             return res.status(404).json({success: false, message:"No such case"});
         }

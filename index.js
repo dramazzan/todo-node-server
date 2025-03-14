@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const config = require('./config/db')
 const caseRoutes = require('./routes/caseRoutes')
 const userRoutes = require('./routes/userRoutes')
+const adminRoutes = require('./routes/adminRoutes')
 const bodyParser = require('body-parser')
 
 const app = express()
@@ -24,6 +25,8 @@ app.get('/', (req, res) => {
 
 app.use('/cases' , caseRoutes)
 app.use('/users' , userRoutes)
+app.use('/admin' , adminRoutes)
+
 
 
 app.listen(port, () => {

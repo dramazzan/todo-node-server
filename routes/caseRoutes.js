@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const caseController = require('../controllers/caseController');
+const authMiddleware = require('../middlewares/authMiddleware');
 
-router.post('/create', caseController.createCase);
+router.post('/create', authMiddleware,caseController.createCase);
 router.get('/all', caseController.getAllCases)
-router.put('/update/:id', caseController.updateCase);
-router.delete('/delete/:id', caseController.deleteCase);
-router.get('/case/:id', caseController.getCaseInfo)
+router.put('/update/:id', authMiddleware,caseController.updateCase);
+router.delete('/delete/:id', authMiddleware,caseController.deleteCase);
+router.get('/case/:id', authMiddleware,caseController.getCaseInfo)
 
 module.exports = router;
