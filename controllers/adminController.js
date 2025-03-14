@@ -1,18 +1,18 @@
 const User = require('../models/user');
 
 exports.deleteUser = async (req, res) => {
-    try{
+    try {
 
         const deletedUser = await User.findByIdAndDelete(req.params.id);
 
-        if(!deletedUser){
+        if (!deletedUser) {
             return res.status(404).json({success: false, message: "error in deleting the user"});
         }
 
-        return res.status(201).json({success: true, message:"user successfully deleted", user: deletedUser});
+        return res.status(201).json({success: true, message: "user successfully deleted", user: deletedUser});
 
 
-    }catch(err){
+    } catch (err) {
         return res.status(500).json({success: false, message: "Something went wrong", error: err.message});
     }
 }

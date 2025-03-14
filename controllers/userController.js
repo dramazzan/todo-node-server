@@ -77,9 +77,6 @@ exports.loginUser = [
 ];
 
 
-
-
-
 exports.getUsers = async (req, res) => {
     try {
         const users = await User.find()
@@ -113,7 +110,11 @@ exports.getUserByLogin = [body('login').notEmpty().withMessage("error getting us
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({success: false, message: errors.array().map((v)=> v.msg), errors: errors.array()});
+            return res.status(400).json({
+                success: false,
+                message: errors.array().map((v) => v.msg),
+                errors: errors.array()
+            });
         }
 
         const user_login = req.body.login

@@ -2,7 +2,7 @@ const isAdmin = async (req, res, next) => {
     try {
         const user = req.user;
         if (!user || user.role !== 'admin') {
-            return res.status(403).json({ success: false, message: "Access denied" });
+            return res.status(403).json({success: false, message: "Access denied"});
         }
 
         next();

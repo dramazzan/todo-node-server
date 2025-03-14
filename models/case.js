@@ -1,40 +1,41 @@
 const mongoose = require('mongoose')
 
 const CaseScheme = new mongoose.Schema({
-    title:{
+    title: {
         type: String,
         required: true,
     },
-    description:{
+    description: {
         type: String,
         required: true,
     }
     ,
-    status:{
+    status: {
         type: String,
-        enum: ['pending', 'in-progress' , 'completed'],
+        enum: ['pending', 'in-progress', 'completed'],
         default: 'pending',
     },
     dueDate: {
         type: Date,
         default: Date.now,
     },
-    priority:{
+    priority: {
         type: String,
-        enum: ['low','medium','high'],
+        enum: ['low', 'medium', 'high'],
         default: 'medium',
     },
-    tags:[{
+    tags: [{
         type: String,
     }],
-    userId:{
+    userId: {
         type: String,
+        required: true,
     },
-    createdAt:{
+    createdAt: {
         type: Date,
         default: Date.now,
     },
-    updatedAt:{
+    updatedAt: {
         type: Date,
         default: Date.now,
     }
