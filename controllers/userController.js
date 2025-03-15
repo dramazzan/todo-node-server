@@ -12,7 +12,7 @@ exports.registerUser = [
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({success: false, errors: errors.array()});
+            return res.status(400).json({success: false, message: errors.array().map((v)=>v.msg),errors: errors.array()});
         }
 
         const {name, email, login, password} = req.body;
@@ -77,86 +77,57 @@ exports.loginUser = [
 ];
 
 
-exports.getUsers = async (req, res) => {
-    try {
-        const users = await User.find()
-        if (!users.length) {
-            return res.status(404).json({success: false, message: "No users found"});
+exports.updateUser = [body("name").notEmpty().withMessage("Name is required"),
+    body("email").isEmail().withMessage("Valid email is required"),
+    body("login").notEmpty().withMessage("Login is required"),
+    body("password").isLength({min: 8}).withMessage("Password must be at least 8 characters"),
+    async (req, res) => {
+        const errors = validationResult(req)
+
+        if(!errors.isEmpty()) {
+            return res.status(400).json({success: false, message: errors.array().map((v)=>v.msg) , errors: errors.array()});
         }
-        return res.status(200).json({success: true, users: users})
-    } catch (err) {
-        return res.status(500).json({success: false, message: "Error getting users", err: err.message});
+
+        const {name, email, login , password} = req.body;
+
+    try{
+        const userId = req.user._id;
+
+        if(!userId || userId == null){
+           return res.status(404).json({success: false, message: "User not found"});
+        }
+
+        const updatedFields = {name, email, login, password};
+        const updatedUser = await User.findByIdAndUpdate(userId, updatedFields , {new: true})
+
+        if(!updatedUser){
+            return res.status(404).json({success:false,  message: "No such user"})
+        }
+
+        return res.status(200).json({success: true, message: "User updated successfully" ,user: updatedUser});
+
+    }catch(err){
+        return res.status(500).json({success: false, message: "Something went wrong" , error: err.message});
+    }
+    }
+]
+
+
+exports.deleteUser = async (req, res) => {
+    try{
+        const userId = req.user._id;
+
+        const deletedUser = await User.findByIdAndDelete(userId)
+        if(!deletedUser){
+            return res.status(404).json({success: false, message: "User not found"});
+        }
+
+        return res.status(200).json({success: true, message: "User deleted successfully", user: deletedUser});
+
+    }catch(err){
+        return res.status(500).json({success: false, message: "Something went wrong" , error: err.message});
     }
 }
-
-exports.getUserById = async (req, res) => {
-    try {
-        const user_id = req.params.id;
-
-        const user = await User.findOne({_id: user_id});
-
-        if (!user) {
-            return res.status(404).json({success: false, message: "User not found"});
-        }
-
-        return res.status(200).json({success: true, user});
-
-    } catch (err) {
-        return res.status(500).json({success: false, message: "Error getting user", error: err.message});
-    }
-};
-
-exports.getUserByLogin = [body('login').notEmpty().withMessage("error getting user by login"), async (req, res) => {
-    try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                success: false,
-                message: errors.array().map((v) => v.msg),
-                errors: errors.array()
-            });
-        }
-
-        const user_login = req.body.login
-
-        const user = await User.findOne({login: user_login});
-
-        if (!user) {
-            return res.status(404).json({success: false, message: "User not found"});
-        }
-
-        return res.status(200).json({success: true, user});
-
-    } catch (err) {
-        return res.status(500).json({success: false, message: "Error getting user", err: err.message});
-    }
-}];
-
-exports.getUserByEmail = [body('email').isEmail().withMessage("error getting user by email"), async (req, res) => {
-    try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                success: false,
-                message: errors.array().map((v) => v.msg),
-                errors: errors.array()
-            });
-        }
-
-        const user_email = req.body.email
-
-        const user = await User.findOne({email: user_email});
-
-        if (!user) {
-            return res.status(404).json({success: false, message: "User not found"});
-        }
-
-        return res.status(200).json({success: true, user});
-
-    } catch (err) {
-        return res.status(500).json({success: false, message: "Error getting user", err: err.message});
-    }
-}];
 
 
 
