@@ -1,8 +1,9 @@
+require('dotenv').config();
+
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const {body, validationResult} = require("express-validator");
 const jwt = require("jsonwebtoken");
-const config = require("../config/db");
 
 exports.registerUser = [
     body("name").notEmpty().withMessage("Name is required"),
@@ -58,7 +59,7 @@ exports.loginUser = [
                 return res.status(401).json({success: false, message: "Wrong username or password"});
             }
 
-            const token = jwt.sign({id: user._id}, config.secretKey, {expiresIn: "1d"});
+            const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: "1d"});
 
             return res.json({
                 success: true,
