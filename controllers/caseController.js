@@ -8,7 +8,8 @@ exports.createCase =[body('title').notEmpty().withMessage("Title is required"),
     const errors = validationResult(req);
 
     if(!errors){
-        return res.status(404).json({success: false, message: errors.array().map(v=>v.msg) , errors: error.array()});
+        const errorMessage = errors.array().map(v=>v.msg).join(", ");
+        return res.status(404).json({success: false, message: errorMessage , errors: error.array()});
     }
 
     try {
@@ -30,10 +31,18 @@ exports.createCase =[body('title').notEmpty().withMessage("Title is required"),
 
 exports.updateCase = [body('title').notEmpty().withMessage("Title is required"),
     body('description').notEmpty().withMessage("Description is required"),async (req, res) => {
-    const {title, description} = req.body;
+
+        const errors = validationResult(req);
+
+        if(!errors){
+            const errorMessage = errors.array().map(v=>v.msg).join(", ");
+            return res.status(404).json({success: false, message: errorMessage , errors: error.array()});
+        }
+
+        const {title, description , status , priority, favorite} = req.body;
 
     try {
-        const updateFields = {title, description}
+        const updateFields = {title, description , status , priority, favorite}
         const updateCase = await Case.findByIdAndUpdate(req.params.id, updateFields, {new: true})
         if (!updateCase) {
             return res.status(404).json({success: false, message: "No such case"});

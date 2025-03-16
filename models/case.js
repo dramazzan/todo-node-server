@@ -27,6 +27,10 @@ const CaseScheme = new mongoose.Schema({
     tags: [{
         type: String,
     }],
+    favorite:{
+      type: Boolean,
+      default: false,
+    },
     userId: {
         type: String,
         required: true,

@@ -7,6 +7,7 @@ router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
 router.put('/update', authMiddleware ,userController.updateUser);
 router.delete('/delete' , authMiddleware , userController.deleteUser)
+router.get('/dashboard' , authMiddleware , userController.getUserData)
 
 
 
