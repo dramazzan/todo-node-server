@@ -81,10 +81,18 @@ exports.getCaseInfo = async (req, res) => {
 
 exports.getAllCases = async (req, res) => {
     try {
-        const cases = await Case.find();
-        return res.status(200).json(cases);
+        const userId = req.user._id;
+
+        const cases = await Case.find({ userId });
+
+        if (cases.length === 0) {
+            return res.status(404).json({ success: false, message: "No cases found for this user" });
+        }
+
+        return res.status(200).json({ success: true, cases });
+
     } catch (err) {
-        return res.status(500).json({message: err.message});
+        return res.status(500).json({ success: false, message: err.message });
     }
 };
 
