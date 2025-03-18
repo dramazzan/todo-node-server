@@ -87,7 +87,7 @@ exports.loginUser = [
                     id: user._id,
                     name: user.name,
                     login: user.login,
-                    email: user.email
+                    email: user.email,
                 }
             });
         } catch (err) {
