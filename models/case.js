@@ -28,8 +28,8 @@ const CaseScheme = new mongoose.Schema({
         type: String,
     }],
     favorite:{
-      type: Boolean,
-      default: false,
+        type: Boolean,
+        default: false,
     },
     userId: {
         type: String,
@@ -42,7 +42,9 @@ const CaseScheme = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: Date.now,
-    }
+    },
+
+
 
 })
 

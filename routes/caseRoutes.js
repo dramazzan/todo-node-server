@@ -9,5 +9,6 @@ router.put('/update/:id', authMiddleware, caseController.updateCase);
 router.delete('/delete/:id', authMiddleware, caseController.deleteCase);
 router.get('/case/:id',  caseController.getCaseInfo)
 router.get('/search' , caseController.searchCases)
+router.post('/favorite' , authMiddleware , caseController.toggleFavorite);
 
 module.exports = router;

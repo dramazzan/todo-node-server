@@ -78,7 +78,7 @@ exports.loginUser = [
                 return res.status(404).json({success: false, message: "Wrong username or password"});
             }
 
-            const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: "1d"});
+            const token = jwt.sign({id: user._id , role:user.role}, process.env.JWT_SECRET, {expiresIn: "1d"});
 
             return res.json({
                 success: true,
@@ -88,6 +88,7 @@ exports.loginUser = [
                     name: user.name,
                     login: user.login,
                     email: user.email,
+                    role: user.role
                 }
             });
         } catch (err) {
@@ -100,7 +101,7 @@ exports.loginUser = [
 exports.updateUser = [body("name").notEmpty().withMessage("Name is required"),
     body("email").isEmail().withMessage("Valid email is required"),
     body("login").notEmpty().withMessage("Login is required"),
-    body("password").isLength({min: 8}).withMessage("Password must be at least 8 characters"),
+
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -115,7 +116,7 @@ exports.updateUser = [body("name").notEmpty().withMessage("Name is required"),
                 errors: errors.array()
             });
         }
-        const {name, email, login, password} = req.body;
+        const {name, email, login} = req.body;
 
         try {
             const userId = req.user._id;
@@ -124,7 +125,7 @@ exports.updateUser = [body("name").notEmpty().withMessage("Name is required"),
                 return res.status(404).json({success: false, message: "User not found"});
             }
 
-            const updatedFields = {name, email, login, password};
+            const updatedFields = {name, email, login};
             const updatedUser = await User.findByIdAndUpdate(userId, updatedFields, {new: true})
 
             if (!updatedUser) {
