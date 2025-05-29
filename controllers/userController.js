@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const User = require("../models/user");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const {body, validationResult} = require("express-validator");
 const jwt = require("jsonwebtoken");
 
