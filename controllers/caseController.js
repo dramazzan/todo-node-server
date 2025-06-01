@@ -135,13 +135,11 @@ exports.toggleFavorite = async (req, res) => {
     try {
         const { id } = req.body;
 
-        // Найти дело по ID
         const reqCase = await Case.findById(id);
         if (!reqCase) {
             return res.status(404).json({ success: false, message: "Case not found" });
         }
 
-        // Инвертировать текущее значение favorite
         const updatedCase = await Case.findByIdAndUpdate(
             id,
             { favorite: !reqCase.favorite, updatedAt: new Date() },
